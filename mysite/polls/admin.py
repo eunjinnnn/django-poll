@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Question
+
+admin.site.register(Question) #django가 admon 로그인시 보여줌?
