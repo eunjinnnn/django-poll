@@ -1,5 +1,21 @@
 from django.contrib import admin
 
-from .models import Question
+from .models import Choice, Question
 
-admin.site.register(Question) #django가 admon 로그인시 보여줌?
+
+class ChoiceInline(admin.TabularInline): #StackedInline -> TabularInline으로 바꿔서 공간을 줄임
+    model = Choice
+    extra = 3 #디폴트로 나둘 선택지 수를 3개로 설정
+
+
+class QuestionAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {"fields": ["question_text"]}),
+        ("Date information", {"fields": ["pub_date"], "classes": ["collapse"]}),
+    ]
+    inlines = [ChoiceInline]
+    list_display = ["question_text", "pub_date", "was_published_recently"]
+    list_filter = ["pub_date"]
+    search_fields = ["question_text"]
+
+admin.site.register(Question, QuestionAdmin)
